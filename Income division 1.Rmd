@@ -1,0 +1,38 @@
+---
+title: "Income analysis"
+author: "Christopher Eshleman"
+date: "1/30/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Census tract income for four states. 
+```{r, include=FALSE}
+setwd("/Users/chriseshleman/Dropbox/Income analysis 2018/ACS_16_5YR_S1901") 
+all_content = readLines("./ACS_16_5YR_S1901_with_ann.csv") 
+skip_second = all_content[-2]
+basics = read.csv(textConnection(skip_second), header = TRUE, stringsAsFactors = FALSE)
+dict = read.csv("./ACS_16_5YR_S1901_metadata.csv")
+head(dict, 5) 
+```
+
+Dictionary got loaded at the end. 
+
+Variables: 
+Household count is HC01_EST_VC01, 
+Median household income is HC01_EST_VC13, and 
+Mean (average) household income is HC01_EST_VC15. 
+
+I'll look into mean and median income. Maybe the difference will offer me some training-wheels indication of inequality. 
+```{r, include=TRUE}
+summary(as.numeric(basics$HC01_EST_VC13)) 
+summary(as.numeric(basics$HC01_EST_VC15)) 
+```
+OK, we're in business ... 
+
+```{r, echo=FALSE}
+boxplot(as.numeric(basics$HC01_EST_VC13))
+```
