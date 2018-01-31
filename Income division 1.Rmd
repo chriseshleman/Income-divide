@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Census tract income for four states. 
 ```{r, include=FALSE}
+library(ggplot2) 
+
 setwd("/Users/chriseshleman/Dropbox/Income analysis 2018/ACS_16_5YR_S1901") 
 all_content = readLines("./ACS_16_5YR_S1901_with_ann.csv") 
 skip_second = all_content[-2]
@@ -30,9 +32,22 @@ I'll look into mean and median income. Maybe the difference will offer me some t
 ```{r, include=TRUE}
 summary(as.numeric(basics$HC01_EST_VC13)) 
 summary(as.numeric(basics$HC01_EST_VC15)) 
+table(substr(basics$GEO.id,10,11)) 
+
+```
+
+```{r, include=FALSE}
+fill = "gold1"
+line = "goldenrod2"
+
+p10 <- ggplot(basics, aes(x = substr(GEO.id,10,11), y = as.numeric(HC01_EST_VC15))) +
+  geom_boxplot(fill = fill, colour = line) +
+  scale_y_continuous(name = "Mean hh income")+
+  scale_x_discrete(name = "States (I'll define the four states later)") +
+  ggtitle("Tract-level household incomes") 
+png("./plot.png", width=720, height=480, res=120) 
+p10 
+dev.off()
+
 ```
 OK, we're in business ... 
-
-```{r, echo=FALSE}
-boxplot(as.numeric(basics$HC01_EST_VC13))
-```
